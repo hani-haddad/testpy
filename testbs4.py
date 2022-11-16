@@ -8,7 +8,7 @@ with open(r'htmls/testhtml.html', "r") as f:
 soup = BeautifulSoup(page , 'html.parser')
 
 
-
+#hani
 
 def name_extraxt(soup):
     print(soup.findAll('title'))
