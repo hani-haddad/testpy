@@ -14,3 +14,7 @@ def name_extraxt(soup):
     print(soup.findAll('title'))
     titleTag = soup.findAll('title')[0]
     return titleTag.text.split('–')[1].strip()
+
+
+
+    ##jgkjhgkjh
