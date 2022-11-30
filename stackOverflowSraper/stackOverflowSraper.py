@@ -8,12 +8,17 @@ from datetime import datetime
 class stackOverflowSraper(getHtml):
     questionlist = []
 
+#call this an extract_page and dont use camle case to function names
     def scrapQuestions(self, html):
 
+        # move it to get_soup
         soup = BeautifulSoup(html, 'html.parser')
         scraped_questions = soup.find_all('div', class_="s-post-summary")
-
+        
+        # create another function to extract questions
         for question in scraped_questions:
+            
+            #never use nameless variables v,i,...
             v = question.find('ul', class_="ml0 list-ls-none js-post-tag-list-wrapper d-inline").contents
             skills = []
             for i in v:
@@ -53,6 +58,9 @@ class stackOverflowSraper(getHtml):
     def run(self, tag):
         '''Start scraper'''
 
+    # this is called setup scraper need to setup scraper and scrape and crowl the html and save it and then start the extractor
+    #  the extractor should reed from file location to setup the soup and start extract the qustions for example 
+    #  extractor should send its final object to another class for writing to csv of json or DB or any other 
         # Loop over page range
         for page in range(1, 4):
             # Init next page's URL
@@ -65,7 +73,7 @@ class stackOverflowSraper(getHtml):
             # Parse the response
             obj.scrapQuestions(response)
 
-
+# we can use main or we can create another file like a runner file to start this function its good for test also
 if __name__ == '__main__':
     # Init scraper instance
     scraper = stackOverflowSraper()
