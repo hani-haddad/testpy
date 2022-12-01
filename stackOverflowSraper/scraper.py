@@ -18,26 +18,25 @@ class scraper(download_htmls,exporter):
 
         return self.questionlist 
 
-    def scrap_question(question_list):
-        for question in question_list:
-            
-            #never use nameless variables v,i,...
-            scraped_skills= question.find('ul', class_="ml0 list-ls-none js-post-tag-list-wrapper d-inline").contents
-            skills = []
-            for skill in scraped_skills:
-                skill = skills.text
-                skills.append(skill)
+    def scrap_question(question):
+ 
+        #never use nameless variables v,i,...
+        scraped_skills= question.find('ul', class_="ml0 list-ls-none js-post-tag-list-wrapper d-inline").contents
+        skills = []
+        for skill in scraped_skills:
+            skill = skill.text
+            skills.append(skill)
 
-            Question = {
-                'title': question.find('a', class_="s-link").text,
-                'link': "https://stackoverflow.com/" + question.find('a', class_="s-link")["href"],
-                'votes': int(question.find('span', class_="s-post-summary--stats-item-number").text),
-                'question_date': datetime.strptime(question.find('span', class_="relativetime")["title"][0:-1],
-                                                   "%Y-%m-%d %H:%M:%S").date().strftime('%Y-%m-%d'),
-                'question_time': datetime.strptime(question.find('span', class_="relativetime")["title"][0:-1],
-                                                   "%Y-%m-%d %H:%M:%S").time().strftime('%H:%M:%S'),
-                'skills': skills
-            }
+        Question = {
+            'title': question.find('a', class_="s-link").text,
+            'link': "https://stackoverflow.com/" + question.find('a', class_="s-link")["href"],
+            'votes': int(question.find('span', class_="s-post-summary--stats-item-number").text),
+            'question_date': datetime.strptime(question.find('span', class_="relativetime")["title"][0:-1],
+                                                "%Y-%m-%d %H:%M:%S").date().strftime('%Y-%m-%d'),
+            'question_time': datetime.strptime(question.find('span', class_="relativetime")["title"][0:-1],
+                                                "%Y-%m-%d %H:%M:%S").time().strftime('%H:%M:%S'),
+            'skills': skills
+        }
         return Question
 
     def run(self, tag):
