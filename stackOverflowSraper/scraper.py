@@ -15,9 +15,7 @@ class scraper(download_htmls,exporter):
         # create another function to extract questions
         
         self.questionlist.append(Question)
-        self.to_csv(Question)
-        df = pd.DataFrame(self.questionlist)
-        # df.to_csv('file_name.csv')
+
         return self.questionlist 
 
     def scrap_question(question_list):
@@ -42,9 +40,6 @@ class scraper(download_htmls,exporter):
             }
         return Question
 
-    
-    
-
     def run(self, tag):
         '''Start scraper'''
 
@@ -57,10 +52,19 @@ class scraper(download_htmls,exporter):
             Url = f'https://stackoverflow.com/questions/tagged/{tag}?tab=Active&page={page}&pagesize=50'
             obj = scraper()
             page = obj.Request(Url)
-            obj.to_html(page.text)
-            response = obj.from_html()
+            file_path=obj.open_file("page.html")
+            obj.write_html(file_path,page.text)
+            soup = obj.get_soup(file_path)
 
             # Parse the response
-            obj.scrapQuestions(response)
+            questions = obj.extract_page(soup)
+            
+            export = exporter()
+            export.data= questions
+            export.json_export()
+            export.csv_export()
+
+            
+
 
 
