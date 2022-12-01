@@ -1,22 +1,28 @@
 from bs4 import BeautifulSoup
-import getHtml
+import download_htmls
 import pandas as pd
 import csv
 import os.path
 from datetime import datetime
 
-class stackOverflowSraper(getHtml):
+class stackOverflowSraper(download_htmls):
     questionlist = []
 
 #call this an extract_page and dont use camle case to function names
-    def scrapQuestions(self, html):
+    def extract_page(self, Page_soup):
 
-        # move it to get_soup
-        soup = BeautifulSoup(html, 'html.parser')
-        scraped_questions = soup.find_all('div', class_="s-post-summary")
-        
+        page_summarylist= Page_soup.find_all('div', class_="s-post-summary")
+        Question=self.scrap_question(page_summarylist)
         # create another function to extract questions
-        for question in scraped_questions:
+        
+        self.questionlist.append(Question)
+        self.to_csv(Question)
+        df = pd.DataFrame(self.questionlist)
+        # df.to_csv('file_name.csv')
+        return df.to_json('Questions_Details.json', orient='records', lines=True)
+
+    def scrap_question(question_list):
+        for question in question_list:
             
             #never use nameless variables v,i,...
             v = question.find('ul', class_="ml0 list-ls-none js-post-tag-list-wrapper d-inline").contents
@@ -35,12 +41,9 @@ class stackOverflowSraper(getHtml):
                                                    "%Y-%m-%d %H:%M:%S").time().strftime('%H:%M:%S'),
                 'skills': skills
             }
-            self.questionlist.append(Question)
-            self.to_csv(Question)
-        df = pd.DataFrame(self.questionlist)
-        # df.to_csv('file_name.csv')
-        return df.to_json('Questions_Details.json', orient='records', lines=True)
+        return Question
 
+    
     def to_csv(self, Question):
         '''Write item to CSV file'''
 
