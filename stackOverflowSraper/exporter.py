@@ -1,9 +1,10 @@
 import pandas as pd
 
-
 class exporter():
-    data=[]
-    data_frame = pd.DataFrame(data)
+
+    def to_data_frame(data):
+        data_frame = pd.DataFrame(data)
+        return data_frame
 
 
     def csv_export(self):
