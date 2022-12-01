@@ -11,10 +11,9 @@ class scraper(download_htmls,exporter):
     def extract_page(self, Page_soup):
 
         page_summarylist= Page_soup.find_all('div', class_="s-post-summary")
-        Question=self.scrap_question(page_summarylist)
-        # create another function to extract questions
-        
-        self.questionlist.append(Question)
+        for question in page_summarylist:
+          Question=self.scrap_question(question)
+          self.questionlist.append(Question)
 
         return self.questionlist 
 
@@ -59,11 +58,9 @@ class scraper(download_htmls,exporter):
             questions = obj.extract_page(soup)
             
             export = exporter()
-            export.data= questions
-            export.json_export()
-            export.csv_export()
-
+            data = export.to_data_frame(questions)
             
-
+            export.json_export(data)
+            export.csv_export(data)
 
 
