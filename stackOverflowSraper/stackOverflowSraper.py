@@ -5,7 +5,7 @@ import csv
 import os.path
 from datetime import datetime
 
-class stackOverflowSraper(download_htmls):
+class scraper(download_htmls):
     questionlist = []
 
 #call this an extract_page and dont use camle case to function names
@@ -25,11 +25,11 @@ class stackOverflowSraper(download_htmls):
         for question in question_list:
             
             #never use nameless variables v,i,...
-            v = question.find('ul', class_="ml0 list-ls-none js-post-tag-list-wrapper d-inline").contents
+            scraped_skills= question.find('ul', class_="ml0 list-ls-none js-post-tag-list-wrapper d-inline").contents
             skills = []
-            for i in v:
-                i = i.text
-                skills.append(i)
+            for skill in scraped_skills:
+                skill = skills.text
+                skills.append(skill)
 
             Question = {
                 'title': question.find('a', class_="s-link").text,
@@ -44,19 +44,7 @@ class stackOverflowSraper(download_htmls):
         return Question
 
     
-    def to_csv(self, Question):
-        '''Write item to CSV file'''
-
-        # Check if "Questions Details.csv" file exists
-        questions_exists = os.path.isfile('Questions_Details.csv')
-
-        # Append data to CSV file
-        with open('Questions_Details.csv', 'a') as csv_file:
-            # Init dictionary writer
-            writer = csv.DictWriter(csv_file, fieldnames=Question)
-
-            # Write entry to CSV file
-            writer.writerow(Question)
+    
 
     def run(self, tag):
         '''Start scraper'''
@@ -68,7 +56,7 @@ class stackOverflowSraper(download_htmls):
         for page in range(1, 4):
             # Init next page's URL
             Url = f'https://stackoverflow.com/questions/tagged/{tag}?tab=Active&page={page}&pagesize=50'
-            obj = stackOverflowSraper()
+            obj = scraper()
             page = obj.Request(Url)
             obj.to_html(page.text)
             response = obj.from_html()
@@ -79,7 +67,7 @@ class stackOverflowSraper(download_htmls):
 # we can use main or we can create another file like a runner file to start this function its good for test also
 if __name__ == '__main__':
     # Init scraper instance
-    scraper = stackOverflowSraper()
+    scraper = scraper()
 
     # Start scraper
     scraper.run("python")
