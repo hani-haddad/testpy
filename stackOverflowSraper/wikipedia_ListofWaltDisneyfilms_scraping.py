@@ -1,19 +1,13 @@
-from bs4 import BeautifulSoup
-import requests
-
-import re
-
 from site_setup import download_htmls
 from data_export import Exporter
 
 
 class Extractor(download_htmls, Exporter):
     main_url = "https://en.wikipedia.org/wiki/List_of_Walt_Disney_Pictures_films#Released"
+    
 
-    def __init__(self,l):
-        self.main_soup = self.request_soup(self.main_url)
-        self.l=l
-        #self.html_location: str = html_location
+    def __init__(self,html_location):
+        self.html_location: str = html_location
 
     def get_movies_details(self, movie_soup):
         self.remove_reference_tags(movie_soup)
@@ -90,14 +84,15 @@ class Extractor(download_htmls, Exporter):
 
     def request_soup(self, url):
         page = self.request(url)
-        file_path = self.open_file(self.l)
+        file_path = self.open_file(self.html_location)
         self.write_html(file_path, page.text)
         soup = self.get_soup(file_path)
         return soup
 
     def get_info(self, data_location):
         # Parse the response
-        movies = self.movies_info_generator(self.main_soup, "Snow White and the Seven Dwarfs")
+        
+        movies = self.movies_info_generator(self.request_soup(self.main_url), "Snow White and the Seven Dwarfs")
 
         export = Exporter(data_location)
         data = Exporter.to_data_frame(movies)
