@@ -100,4 +100,3 @@ class Extractor(download_htmls, Exporter):
         export.json_export(data)
         export.csv_export(data)
 
-
