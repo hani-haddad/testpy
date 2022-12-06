@@ -37,3 +37,4 @@ class download_htmls:
             html = html_file.read()
             soup = BeautifulSoup(html, 'html.parser')
             return soup
+            

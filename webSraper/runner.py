@@ -14,3 +14,4 @@ if __name__ == '__main__':
     wikipedia_scraper.get_info("C:/Users/shatha/Desktop/WaltDisneyfilms_details")
     
 
+

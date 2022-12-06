@@ -16,3 +16,4 @@ class Exporter:
 
     def json_export(self, data_frame):
         data_frame.to_json(self.location + '.json', orient='records', lines=True)
+
