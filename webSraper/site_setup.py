@@ -38,3 +38,4 @@ class download_htmls:
             soup = BeautifulSoup(html, 'html.parser')
             return soup
             
+
