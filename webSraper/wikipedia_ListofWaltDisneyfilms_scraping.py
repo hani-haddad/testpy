@@ -1,5 +1,6 @@
 from site_setup import download_htmls
 from data_export import Exporter
+from bs4 import NavigableString, Tag
 
 
 class Extractor(download_htmls, Exporter):
@@ -25,7 +26,7 @@ class Extractor(download_htmls, Exporter):
                 movie[th] = td
         return movie
 
-    def movies_info_generator(self, main_soup, movie_name):
+    def movies_site_iterator(self, main_soup, movie_name):
         tables = main_soup.find_all("table", class_="wikitable sortable")
         movies = []
         for index, table in enumerate(tables):
@@ -37,10 +38,8 @@ class Extractor(download_htmls, Exporter):
                     page_link = "https://en.wikipedia.org" + row.a["href"]
                     print(page_link)
                     movie_soup = self.request_soup(str(page_link))
-                    # nestedPage= requests.get(str(l))
-                    # movie_soup = BeautifulSoup(nestedPage.content,'html.parser')
                     try:
-                        movies.append(self.get_movies_details(movie_soup))
+                        movies.append(self.get_movies_details(movie_soup),self.text_between_2tags("h2","h2"))
                     except Exception as e:
                         print(e)
                         print("strange case profile")
@@ -99,3 +98,72 @@ class Extractor(download_htmls, Exporter):
 
         export.json_export(data)
         export.csv_export(data)
+
+    def text_between_2tags(start_tag,end_tag,moviesoup):
+        movieDetails = moviesoup.find("div", class_="vector-body")
+        movieDescription = {}
+        for header in movieDetails.find_all(start_tag):
+            movieDetail = header.get_text().strip()
+            nextNode = header
+            movieDetailText = []
+            nested_data=[]
+
+            while True:
+                nextNode = nextNode.nextSibling
+                # This writes out the last of the H2 tags and its following contents
+                if not nextNode:
+                    movieDescription[movieDetail] = "\n".join(movieDetailText)
+                    break
+                # This adds non-H2 tags to the text to attach to the text of the H2
+                elif isinstance(nextNode, NavigableString):
+                    if nextNode.strip():
+                        movieDetailText.append(nextNode.strip())
+                        pass
+                # This detects the next H2 and writes the compiled text to the previous H2
+                elif isinstance(nextNode, Tag):
+                    if nextNode.name == end_tag:
+                        break
+                    elif nextNode.name == "div" or nextNode.name == "style":
+                        continue
+                    elif nextNode.name == "h3" :
+                        res= self.text_tags(nextNode)
+                        nested_data.append(res)
+                        movieDescription[movieDetail]= nested_data
+        
+                    movieDetailText.append(nextNode.get_text())
+                    nested_data.append(nextNode.get_text())
+                    movieDescription[movieDetail] = "\n".join(movieDetailText)
+                
+        return movieDescription
+
+    def text_tags(tag):
+        movieDescription = {}
+        for header in tag.find_next_siblings():
+            movieDetail = tag.get_text().strip()
+            movieDescription[movieDetail] =""
+            nextNode= header.previous_sibling
+            movieDetailText = []
+            while True:
+                nextNode = nextNode.nextSibling
+                
+                # This writes out the last of the H2 tags and its following contents
+                if not nextNode:
+                    movieDescription[movieDetail] = "\n".join(movieDetailText)
+                    break
+                # This adds non-H2 tags to the text to attach to the text of the H2
+                elif isinstance(nextNode, NavigableString):
+                    if nextNode.strip():
+                        movieDetailText.append(nextNode.strip())
+                        pass
+                # This detects the next H2 and writes the compiled text to the previous H2
+                elif isinstance(nextNode, Tag):
+                    if nextNode.name == "h2" or nextNode.name == "h3" or nextNode.name == "h4" or nextNode.name == "h5":
+                        return movieDescription
+                    if nextNode.name == "p":
+                        movieDetailText.append(nextNode.get_text())
+                        movieDescription[movieDetail] = "\n".join(movieDetailText)
+                    elif nextNode.name == "div" or nextNode.name == "style":
+                        continue
+                    movieDetailText.append(nextNode.get_text())
+
+        return movieDescription
