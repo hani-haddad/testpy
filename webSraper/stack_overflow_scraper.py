@@ -1,4 +1,4 @@
-from soup_setup import download_htmls
+from site_setup import download_htmls
 from data_export import Exporter
 from datetime import datetime
 
@@ -70,3 +70,4 @@ class Scraper(download_htmls, Exporter):
             export.csv_export(data)
 
             
+
