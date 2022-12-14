@@ -22,7 +22,7 @@ class full_name():
     
      elif name :=self.find_specialCase_tag(soup):
         return name
-        
+
      soup.find_all(self.search_header_tags,string=re.complie(self.re_compund_name,re.I))
 
     def clean_up_name(name):
@@ -36,14 +36,14 @@ class full_name():
         return res if(len(res)>0) else  None 
 
     def find_header_tag(self,soup):
-          names=soup.find_all(self.search_tags,string=re.compile(self.re_compund_name,re.I))
-          [self.search_class_names.append(tag["class"]) if tag["class"] not in self.search_tags else  None for tag in names]
-          return [name.text for name in names] if(len(names)>0)  else  None
+          name_tags=soup.find_all(self.search_tags,string=re.compile(self.re_compund_name,re.I))
+          [self.search_class_names.append(tag["class"]) if tag["class"] not in self.search_class_names else  None for tag in name_tags]
+          return [name.text for name in name_tags] if(len(name_tags)>0)  else  None
 
     def find_by_class(self,soup,tag=""):
-          names=soup.find_all(tag,self.search_class_names,string=re.compile(self.re_compund_name,re.I))
-          [self.search_tags.append(tag.name) if tag.name not in self.search_tags else  None for tag in names]
-          return [name.text for name in names] if(len(names)>0)  else  None
+          name_tags=soup.find_all(tag,self.search_class_names,string=re.compile(self.re_compund_name,re.I))
+          [self.search_tags.append(tag.name) if tag.name not in self.search_tags else  None for tag in name_tags]
+          return [name.text for name in name_tags] if(len(name_tags)>0)  else  None
         
     def find_specialCase_tag(soup):
         return
