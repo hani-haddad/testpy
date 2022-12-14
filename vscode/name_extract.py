@@ -40,7 +40,7 @@ class full_name():
     def find_by_class(self,soup,tag=""):
         for class_name in self.search_class_names:
           names=soup.find_all(tag,class_name,string=re.compile(self.re_compund_name,re.I))
-          [self.search_tags.append(tag.name) for tag in names]
+          [self.search_tags.append(tag.name) if tag.name not in self.search_tags else  None for tag in names]
           return [name.text for name in names] if(len(names)>0)  else  None
         
     def find_specialCase_tag(soup):
