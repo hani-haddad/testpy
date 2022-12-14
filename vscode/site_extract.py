@@ -14,19 +14,21 @@ class soup_extractor:
         print(' | Status code: %s' % page.status_code)
         return page
     
-    def get_soup(self):
-            page = self.request(self.Url)
+    @staticmethod
+    def get_soup(page):
             soup = BeautifulSoup(page, 'html.parser')
             return soup
 
     def profile_soup_generator(self):
-        main_soup= self.get_soup()
+        main_page = self.request(self.Url)
+        main_soup= self.get_soup(main_page)
         sections = main_soup.find_all("section",class_="listing")
         pages_soup=[]
         for index ,section in  enumerate(sections):
             #if index == 1:
             # break
             page_link = section.a["href"]
-            soup= self.get_soup(page_link)
+            page=self.request(page_link)
+            soup= self.get_soup(page)
             pages_soup.append(soup)
         return pages_soup
