@@ -16,7 +16,7 @@ class soup_extractor:
     
     @staticmethod
     def get_soup(page):
-            soup = BeautifulSoup(page, 'html.parser')
+            soup = BeautifulSoup(page.content, 'html.parser')
             return soup
 
     def profile_soup_generator(self):
@@ -25,10 +25,11 @@ class soup_extractor:
         sections = main_soup.find_all("section",class_="listing")
         pages_soup=[]
         for index ,section in  enumerate(sections):
-            #if index == 1:
-            # break
+
             page_link = section.a["href"]
             page=self.request(page_link)
             soup= self.get_soup(page)
             pages_soup.append(soup)
+            if index == 1:
+             break
         return pages_soup
