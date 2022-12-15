@@ -12,8 +12,7 @@ class page_extractor(soup_extractor,full_name):
                 'names':[]
             }
          
-        soups =self.profile_soup_generator() 
-        print(len(soups)) 
+        soups =self.profile_soup_generator()  
         for soup in soups:
             if name :=self.name_extrator(soup):
                 data['names'].append({'name':self.clean_up_name(name)})
