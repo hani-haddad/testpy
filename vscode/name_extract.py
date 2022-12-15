@@ -1,15 +1,16 @@
 import re
 class full_name():
-    suffixes=[' I ',' II ',' III ',' IV ',' V ',' Senior ',' Junior ','Jr',' Sr ',' PhD ',' APR ',' RPh ',' PE ',' MD ',' MA ',' DMD ',' CME ']
-    honerfixse=["Mr.","master","mister","Mrs.","Dr.","Rev.","Fr."]
+    suffixes=['I\.?\s?','II\.?\s?','III\.?\s?','IV\.?\s?','V\.?\s?','Senior\.?\s?','Junior\.?\s?','Jr\.?\s?','Sr\.?\s?','Ph\.?\s?D\.?', 'APR\.?\s?','RPh\.?\s?','PE\.?\s?','MD\.?\s?','MA\.?\s?','DMD\.?\s?','CME\.?\s?']
+    honer_suffixes=["Mr\.?\s?","master\.?\s?","mister\.?\s?","Mrs\.?\s?","Dr\.?\s?","Rev\.?\s?","Fr\.?\s?","miss","ms\.?\s?"]
     #search_header_tags=["h1","h2"]
-    search_tags=["h1","h2"]
+    search_tags=["h1","h2","h3","h4","h5","h6"]
     search_class_names=[]
-    re_name_mid="full_name"
+    re_full_name="([a-zA-Z'?-?,?.?]*\s[a-zA-Z'?-?,?.?]*\s?[a-zA-Z'?-?,?.?]*\s?([a-zA-Z'?-?,?.?]*)?)"
     suffixes_string='|'.join(suffixes)
-    re_compund_name= rf'({suffixes_string}){re_name_mid}' 
-    
+    honer_suffixes_string='|'.join(honer_suffixes)
 
+    re_compund_name= rf'^({honer_suffixes_string})?{re_full_name}({suffixes_string})?' 
+    
     def name_extrator(self,soup):
      if name :=self.find_title_tag(soup):
         return name
@@ -23,8 +24,6 @@ class full_name():
      elif name :=self.find_specialCase_tag(soup):
         return name
 
-     soup.find_all(self.search_header_tags,string=re.complie(self.re_compund_name,re.I))
-
     def clean_up_name(name):
         return
 
@@ -32,8 +31,8 @@ class full_name():
         name_regex = re.compile(self.re_compund_name,re.I)
         title=soup.find("title",string=name_regex).text
         title_list=re.split(',|_|-|!', title)[0]
-        res= [name_regex.sub('', x).strip() for x in title_list]
-        return res if(len(res)>0) else  None 
+        #res= [name_regex.search(x).group(0) for x in title_list] #return only matched strings 
+        return title_list[0]
 
     def find_header_tag(self,soup):
           name_tags=soup.find_all(self.search_tags,string=re.compile(self.re_compund_name,re.I))
