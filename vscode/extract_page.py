@@ -1,19 +1,15 @@
-from site_extract import soup_extractor
-from name_extract import full_name
+from name_extract import FullName
 
 
-class page_extractor(soup_extractor,full_name):
-    
+class PageExtractor(FullName):
+    name = ''
     def __init__(self):
         pass
 
-    def extract_info(self):
-        data={
-                'names':[]
-            }
-         
-        soups =self.profile_soup_generator()  
-        for soup in soups:
-            if name :=self.name_extrator(soup):
-                data['names'].append({'name':self.clean_up_name(name)})
-        return data
+    def extract_info(self,soup):
+        data={}  
+
+        if name :=self.name_extrator(soup):
+            self.name = self.clean_up_name(name)
+            data['names']=self.name
+            return {self.name:data}

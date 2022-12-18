@@ -1,15 +1,18 @@
-from extract_page import page_extractor
+from extract_page import PageExtractor
 from data_export import Exporter
+from site_extract import SoupExtractor
 
 if __name__ == '__main__':
     # Init scraper instance
-    info_scraper = page_extractor()
-    data =info_scraper.extract_info()
+    info_scraper = PageExtractor()
+    soup_extractor=SoupExtractor("C:/Users/shatha/Desktop/souphtml")
+    
+    soups = soup_extractor.profile_soup_generator() 
+    id_to_att_list = []
+    o = {}
+    for soup in soups:
+            if o := info_scraper.extract_info(soup):
+                id_to_att_list.append(o)
 
     export=Exporter("C:/Users/shatha/Desktop/info")
-    data=export.to_data_frame(data)
-    export.json_export(data)
-
-
-
-
+    export.json_export(id_to_att_list)
