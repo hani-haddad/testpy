@@ -39,6 +39,21 @@ class PhoneNumber(SoupExtractor):
             return None
     
     def find_by_phone_phrases(self,soup,tag=""):
+        contact = soup.find_all(tag="",text=re.compile('contact',re.I))
+        phones=[]
+        for index,i in enumerate(contact):
+
+            if i.name == 'script':
+                continue
+            f=soup.find_all(i.name,text=re.compile(self.re_phone,re.I))
+            phones.append(f) if(len(f)>0 and f not in phones)  else  None
+            for t in range(0,5):
+                i=i.next_element
+                if i.name != 'script':
+                  print(i.name)
+                f=soup.find_all(i.name,text=re.compile(self.re_phone,re.I))
+                n=[u if u not in phones and '@context' not in u else  None for u in f]
+                t+1
         return
 
     def general_search(self,soup):
