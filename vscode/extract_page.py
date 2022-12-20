@@ -1,7 +1,7 @@
 from name_extract import FullName
+from phone_extract import PhoneNumber
 
-
-class PageExtractor(FullName):
+class PageExtractor(FullName,PhoneNumber):
     name = ''
     def __init__(self):
         pass
@@ -12,4 +12,10 @@ class PageExtractor(FullName):
         if name :=self.name_extrator(soup):
             self.name = self.clean_up_name(name)
             data['names']=self.name
-            return {self.name:data}
+            
+            
+        if phone :=self.phone_extrator(soup):
+            self.phone = self.clean_up_phone(phone)
+            data['phones']=self.phone
+            
+        return {self.name:data}
