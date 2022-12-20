@@ -12,10 +12,9 @@ class PageExtractor(FullName,PhoneNumber):
         if name :=self.name_extrator(soup):
             self.name = self.clean_up_name(name)
             data['names']=self.name
-            
-            
+
         if phone :=self.phone_extrator(soup):
             self.phone = self.clean_up_phone(phone)
             data['phones']=self.phone
-            
+   
         return {self.name:data}

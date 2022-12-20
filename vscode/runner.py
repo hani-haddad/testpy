@@ -14,5 +14,7 @@ if __name__ == '__main__':
             if o := info_scraper.extract_info(soup):
                 id_to_att_list.append(o)
 
+
     export=Exporter("C:/Users/shatha/Desktop/info")
     export.json_export(id_to_att_list)
+
