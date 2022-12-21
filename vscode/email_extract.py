@@ -1,11 +1,7 @@
 import re 
-import itertools
-from operator import is_not
-from functools import partial
-from site_extract import SoupExtractor
 
 class Email:
-    re_email ="([\d\w\.]+@[\d\w\.\-]+(\.\w{1,2})?\.\w[^\.]{1,2}$)"
+    re_email ="([\d\w\.]+@[\d\w\.\-]+(\.\w{1,2})?\.[a-zA-Z][^\.]{1,2})"
     #search_tags=["h1","h2","h3","h4","h5","h6"]
     search_phrases_email=['tel','phone','call','contact','contacts','contact us']
 
@@ -13,10 +9,7 @@ class Email:
         pass
 
     def email_extrator(self,soup):
-        if phones :=self.find_in_contact_page(soup):
-            return phones
-
-        if phones :=self.find_in_class(soup):
+        if phones :=self.find_in_a_tag(soup):
             return phones
 
         elif phones :=self.find_by_email_phrases(soup):
@@ -25,6 +18,14 @@ class Email:
         elif phones :=self.general_search(soup):
             return phones
     
+    def clean_up_name(self,email):
+        return email
+    
+    def find_in_a_tag(self,soup):
+        emails=soup.find_all('a',href=re.compile('^mailto:'+self.re_email))
+        emails=[email.text if '@context' not in email else  None for email in emails]
+        return emails
+
     def find_by_email_phrases(self,soup,tag=""):
         print(33) 
         for phrase in self.search_phrases_email:

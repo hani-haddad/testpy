@@ -8,7 +8,7 @@ class PhoneNumber(SoupExtractor):
     re_phone ="(\d{3}|\(\d{3}\))(\s|-|\.)+(\d{3}|\(\d{3}\))(\s|-|\.)+(\d{4}|\(\d{4}\))(\s*(ext|x|ext.)\s*(\d{2,5}))?"
     #search_tags=["h1","h2","h3","h4","h5","h6"]
     search_class_phones=["telnum"]
-    search_phrases_phones=['tel','phone','call','contact']
+    search_phrases_phones=['tel','phone','call','contact','telephone']
 
     def __init__(self):
         pass
@@ -64,16 +64,16 @@ class PhoneNumber(SoupExtractor):
         print(33) 
         for phrase in self.search_phrases_phones:
            contacts = soup.find_all(tag="",text=re.compile(phrase,re.I))
-        for tag in contacts:
-            if tag.name == 'script':
-                continue
-            phones_match=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
-            phones=[phone if phone not in phones or '@context' not in phone else  None for phone in phones_match]
-            for iterator in range(0,20):
-                tag=tag.next_element
-                if tag.name != 'script':
-                 phones_match=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
-                 phones=[phone.text if phone not in phones or '@context' not in phone else  None for phone in phones_match]
+           for tag in contacts:
+                if tag.name == 'script':
+                    continue
+                phones_match=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
+                phones=[phone if phone not in phones or '@context' not in phone else  None for phone in phones_match]
+                for iterator in range(0,20):
+                    tag=tag.next_element
+                    if tag.name != 'script':
+                        phones_match=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
+                        phones=[phone.text if phone not in phones or '@context' not in phone else  None for phone in phones_match]
         return phones
 
     def general_search(self,soup):
