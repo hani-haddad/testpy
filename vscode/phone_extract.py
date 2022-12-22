@@ -67,13 +67,14 @@ class PhoneNumber(SoupExtractor):
            for tag in contacts:
                 if tag.name == 'script':
                     continue
-                phones_match=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
-                phones=[phone if phone not in phones or '@context' not in phone else  None for phone in phones_match]
+                phones_match_tag=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
+                phones1=[phone if phone not in phones1 or '@context' not in phone else  None for phone in phones_match_tag]
                 for iterator in range(0,20):
                     tag=tag.next_element
                     if tag.name != 'script':
-                        phones_match=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
-                        phones=[phone.text if phone not in phones or '@context' not in phone else  None for phone in phones_match]
+                        phones_match_after_tag=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
+                        phones2=[phone.text if phone not in phones2 or '@context' not in phone else  None for phone in phones_match_after_tag]
+                phones=phones1+phones2
         return phones
 
     def general_search(self,soup):
