@@ -1,8 +1,9 @@
 from name_extract import FullName
 from phone_extract import PhoneNumber
 from email_extract import Email
+from address_extract import Address
 
-class PageExtractor(FullName,PhoneNumber,Email):
+class PageExtractor(FullName,PhoneNumber,Email,Address):
     name = ''
     def __init__(self):
         pass
@@ -19,7 +20,11 @@ class PageExtractor(FullName,PhoneNumber,Email):
             data['phones']=self.phone
 
         if email :=self.email_extrator(soup):
-            self.email = self.clean_up_phone(email)
+            self.email = self.clean_up_email(email)
             data['emails']=self.email
+        
+        if address :=self.address_extrator(soup):
+            self.address = self.clean_up_address(address)
+            data['addresses']=self.address
    
         return {self.name:data}

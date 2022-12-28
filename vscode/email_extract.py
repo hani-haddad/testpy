@@ -18,7 +18,7 @@ class Email:
         elif phones :=self.general_search(soup):
             return phones
     
-    def clean_up_name(self,email):
+    def clean_up_email(self,email):
         return email
     
     def find_in_a_tag(self,soup):
@@ -33,12 +33,13 @@ class Email:
            for tag in contacts:
                 if tag.name == 'script':
                     continue
-                emails_match=soup.find_all(tag.name,text=re.compile(self.re_email,re.I))
-                emails=[email if email not in emails or '@context' not in email else  None for email in emails_match]
+                emails_match_tag=soup.find_all(tag.name,text=re.compile(self.re_email,re.I))
+                emails1=[email if email not in emails1 or '@context' not in email else  None for email in emails_match_tag]
                 for iterator in range(0,5):
                     tag=tag.next_element
-                    emails_match=soup.find_all(tag.name,text=re.compile(self.re_email,re.I))
-                    emails=[email.text if email not in emails or '@context' not in email else  None for email in emails_match]
+                    emails_match_after_tag=soup.find_all(tag.name,text=re.compile(self.re_email,re.I))
+                    emails2=[email.text if email not in emails2 or '@context' not in email else  None for email in emails_match_after_tag]
+                emails=emails1+emails2        
         return emails
     
     def general_search(self,soup):
