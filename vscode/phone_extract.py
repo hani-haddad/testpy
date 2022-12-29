@@ -69,7 +69,7 @@ class PhoneNumber(SoupExtractor):
                     continue
                 phones_match_tag=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
                 phones1=[phone if phone not in phones1 or '@context' not in phone else  None for phone in phones_match_tag]
-                for iterator in range(0,20):
+                for iterator in range(0,5):
                     tag=tag.next_element
                     if tag.name != 'script':
                         phones_match_after_tag=soup.find_all(tag.name,text=re.compile(self.re_phone,re.I))
