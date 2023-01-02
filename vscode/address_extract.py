@@ -29,6 +29,23 @@ class Address:
     def clean_up_address(self,address):
       return address
 
+    def check_address_regex(self,address):
+      if re.compile(self.re_postel_code, re.IGNORECASE).search(address):
+          print("re_postel_code")
+
+      if re.compile(self.re_region, re.IGNORECASE).search(address):
+        print("re_region")
+
+      if re.compile(self.re_locality, re.IGNORECASE).search(address):
+        print("re_locality")
+
+      if re.compile(self.re_streetAddress, re.IGNORECASE).search(address):
+        print("re_streetAddress")
+
+      if re.compile(self.re_adr_name, re.IGNORECASE).match(address):
+        print("re_adr_name")
+
+
     def find_class(self,soup):
       search_class_address=[]
       for element in soup.find_all(class_=True):
