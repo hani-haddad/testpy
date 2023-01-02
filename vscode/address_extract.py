@@ -4,12 +4,14 @@ import os
 from serpapi import GoogleSearch
 
 class Address:
-    re_postel_code ='\s\d{5}'
+    re_postel_code ='\d{5}'
     re_region = ',?\s([A-Z][A-Z]|[A-Z]\w+(\s[A-Z]\w+)?)'
-    re_locality='[A-Z]\w+(\s[A-Z]\w+)?,'
-    re_streetAddress='(^\d{3,4})?[a-z]*\s?([A-Z]\w+)?(\s[A-Z]\w+)?\s?#?(\d{3,4})?'
+    re_locality='([A-Z]\w+)(\s[A-Z]\w+),'
+    re_streetAddress='(^\d{3,4})([a-z]*)?\s?([A-Z]\w+)?(\s[A-Z]\w+)?\s?#?(\d{3,4})?'
+    re_country='([A-Z]\w+)(\s[A-Z]\w+)'
+    re_adr_name= rf'({re_streetAddress})?,?\s({re_locality})?\s?({re_region})?,?\s({re_postel_code})?\s?({re_country})?' 
+    
     ['street','street_1','state_1','zip_1']
-    re_adr_name= rf'({re_streetAddress})?,?\s({re_locality})?\s?({re_region})?,?\s({re_postel_code})?\s?' 
     search_tags=[]
     search_phrases_address=["addr","home"]
 
