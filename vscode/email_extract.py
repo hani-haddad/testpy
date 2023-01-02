@@ -9,14 +9,14 @@ class Email:
         pass
 
     def email_extrator(self,soup):
-        if phones :=self.find_in_a_tag(soup):
-            return phones
+        if emails :=self.find_in_a_tag(soup):
+            return emails
 
-        elif phones :=self.find_by_email_phrases(soup):
-            return phones
+        elif emails :=self.find_by_email_phrases(soup):
+            return emails
         
-        elif phones :=self.general_search(soup):
-            return phones
+        elif emails :=self.general_search(soup):
+            return emails
     
     def clean_up_email(self,email):
         return email

@@ -23,6 +23,9 @@ class Address:
      elif address :=self.google_map_search(soup):
         return address
 
+     elif address :=self.find_in_address_tag(soup):
+        return address
+
     def clean_up_address(self,address):
       return address
 
