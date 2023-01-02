@@ -75,6 +75,14 @@ class Address:
         elif re.compile("(var\s)(street|state|zip|postal_code)", re.IGNORECASE).search(script.text):
             print(script)
 
+    def find_in_address_tag (self,soup):
+        try:
+          if re.compile(self.re_adr_name, re.IGNORECASE).match(soup.find('address').text):
+           address=soup.find('address').text 
+          return address
+        except: pass
+
+    
     def google_map_search(self):
         params = {
             "engine": "google_maps",
